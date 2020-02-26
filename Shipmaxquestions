@@ -1,0 +1,112 @@
+Create VPC
+
+aws ec2 create-vpc --cidr-block 10.0.0.0/16
+
+
+AWS create security group
+
+aws ec2 create-security-group --group-name Shipmaxex1 --description "Shipmax test first question"
+{
+
+    "GroupId": "sg-094ac59434cf4c397"
+
+}
+
+
+Create public subnet
+
+ aws ec2 create-subnet --vpc-id vpc-09b5ec79c28dd8f86 --cidr-block 10.0.1.0/24
+
+
+Create internet gateway to VPC for external traffic and route 
+
+aws ec2 attach-internet-gateway --vpc-id vpc-09b5ec79c28dd8f86 --internet-gateway-id igw-07fbfba2e82e19d6d
+
+Create route table
+
+ aws ec2 create-route-table --vpc-id vpc-09b5ec79c28dd8f86
+
+
+Attach route table
+
+ aws ec2 create-route --route-table-id rtb-07113ae65e4a526a0 --destination-cidr-block 0.0.0.0/0 --gateway-id igw-07fbfba2e82e19d6d
+
+
+Allowing all external traffic to security group over TCP port 
+
+aws ec2 authorize-security-group-ingress --group-id sg-094ac59434cf4c397 --protocol tcp --port 22  --cidr 0.0.0.0/0
+
+Allowing TCP traffic from other VPC
+
+aws ec2 authorize-security-group-ingress --group-id sg-094ac59434cf4c397 --protocol tcp --port 22  --cidr 172.31.0.0/16
+
+Showing results
+
+aws ec2 describe-security-groups --group-names Shipmaxex1
+{
+    "SecurityGroups": [
+        {
+            "Description": "Shipmax test first question",
+            "GroupName": "Shipmaxex1",
+            "IpPermissions": [
+                {
+                    "FromPort": 22,
+                    "IpProtocol": "tcp",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        },
+                        {
+                            "CidrIp": "172.31.0.0/16"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "ToPort": 22,
+                    "UserIdGroupPairs": []
+                }
+            ],
+            "OwnerId": "049611765225",
+            "GroupId": "sg-094ac59434cf4c397",
+            "IpPermissionsEgress": [
+                {
+                    "IpProtocol": "-1",
+                    "IpRanges": [
+                        {
+                            "CidrIp": "0.0.0.0/0"
+                        }
+                    ],
+                    "Ipv6Ranges": [],
+                    "PrefixListIds": [],
+                    "UserIdGroupPairs": []
+                }
+            ],
+            "VpcId": "vpc-c32cb7bb"
+        }
+    ]
+}
+
+
+
+
+Question -2 
+
+Create s3 bucket and upload file in to bucket
+
+aws s3api create-bucket --bucket shipmaxsecondquestion --region us-east-1;
+
+Showing bucket
+
+aws s3 ls
+2020-02-26 21:33:16 shipmaxsecondquestion
+
+Uploading file
+
+aws s3 cp Secondquestion.rtf s3://shipmaxsecondquestion/
+
+upload: ./Secondquestion.rtf to s3://shipmaxsecondquestion/Secondquestion.rtf
+
+Showing file name inside bucket
+
+aws s3 ls s3://shipmaxsecondquestion
+2020-02-26 21:45:19        398 Secondquestion.rtf
