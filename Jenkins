@@ -1,0 +1,2 @@
+If installing on docker container then default password can be found on
+docker exec <container_name> cat /var/jenkins_home/secrets/initialAdminPassword
