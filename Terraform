@@ -1,0 +1,18 @@
+resource "aws_ses_receipt_rule" "shipmaxsecondquestion" {
+  name          = "shipmaxsecondquestion"
+  rule_set_name = "default-rule-set"
+  recipients    = ["Devkalariya@gmail.com"]
+  enabled       = true
+  scan_enabled  = true
+
+  add_header_action {
+    header_name  = "Custom-Header"
+    header_value = "Added by Test"
+    position     = 1
+  }
+
+  s3_action {
+    bucket_name = "shipmaxsecondquestion"
+    position    = 2
+  }
+}
